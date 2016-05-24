@@ -4,8 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' })
 
 var routes = require('./routes/index');
 
@@ -33,6 +31,13 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
+//file is too big!
+app.use(function (err, req, res, next) {
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    res.json({ result: 'fail', error: { code: 1001, message: 'File is too big' } })
+    return 
+  }
+})
 
 // development error handler
 // will print stacktrace
